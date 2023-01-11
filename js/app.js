@@ -23,45 +23,6 @@ const phrases =
       "have fun"
    ]; 
 
-startGame.addEventListener('click', () => 
-{
-    resetGame();
-    gameBoard.style.display = 'none';
-});
-
-// start.addEventListener('click', () => 
-// {
-//    gameBoard.style.visibility = 'visible';
-//    if (gameBoard.style.visibility === 'visible') 
-//    {
-//       resetGame();
-//       gameBoard.style.visibility = 'hidden';
-//       gameBoard.style.transition = 'all .7s';
-//    }
-// });
-
-// *LISTENS FOR KEYBOARD LETTERS TO BE CLICKED
-keys.addEventListener('click', (key) => 
-{
-    if(key.target.tagName === 'BUTTON') 
-    {
-      key.target.className = 'chosen';
-      key.target.disabled = true;
-
-      // if no matches found, remove heart
-      if(checkLetter(key.target.textContent) == null) 
-      {
-         lives[missed].src = 'images/lostHeart.png';
-         missed++;
-      }
-    checkWin();
-    }
-});
-
-
-// const getRandomPhraseAsArray = arr => arr[Math.floor(Math.random() * arr.length)]
-// .split('');
-
 // *RETURNS A RANDOM PHRASE FROM ARRAY
 const getRandomPhraseAsArray = phrasesAarry =>
 {
@@ -88,6 +49,33 @@ const addPhraseToDisplay = phrasesSplitByChar =>
       phrase.appendChild(phraseItem);
    }
 }
+
+const newPhrase = getRandomPhraseAsArray(phrases);
+
+startGame.addEventListener('click', () => 
+{
+   resetGame();
+   gameBoard.style.display = 'none';
+   addPhraseToDisplay(newPhrase);
+});
+
+// *LISTENS FOR KEYBOARD LETTERS TO BE CLICKED
+keys.addEventListener('click', (key) => 
+{
+    if(key.target.tagName === 'BUTTON') 
+    {
+      key.target.className = 'chosen';
+      key.target.disabled = true;
+
+      // if no matches found, remove heart
+      if(checkLetter(key.target.textContent) == null) 
+      {
+         lives[misses].src = 'images/lostHeart.png';
+         misses++;
+      }
+    checkWin();
+    }
+});
 
 // *CHECKS IF LETTER IS IN PHRASE
 const checkLetter = buttonClicked => 
@@ -124,7 +112,7 @@ const checkWin = () =>
       return win;
 
    } 
-   else if(missed > 4) 
+   else if(misses > 4) 
    {
       title.innerText = '🍀Maybe next time!';
       startGame.innerText = 'Play Again🤷‍♂️';
@@ -135,46 +123,18 @@ const checkWin = () =>
    }
 }
 
-function resetGame() 
-{
-   let keyboardBtn = document.querySelectorAll('#qwerty .keyrow button');
-   missed = 0;
+// *Reset Game
+function resetGame() {
+    misses = 0;
+    phrase.textContent = '';
+    const letterBtn = document.querySelectorAll('.chosen');
+    
+    for (let i = 0; i< letterBtn.length; i++) {
+        letterBtn[i].classList.remove('chosen');
+        letterBtn[i].disabled = false;
+    };
 
-   phrase.innerHTML = '';
-   let phraseSplit = getRandomPhraseAsArray(phrases);
-   addPhraseToDisplay(phraseSplit);
-   
-   for(let i = 0; i < keyboardBtn.length; i++) 
-   {
-      keyboardBtn[i].classList.remove('chosen');
-      keyboardBtn[i].disabled = false;
-      
-      for(let j = 0; j < lives.length; j++) 
-      {
-         lives[j].src = 'images/liveHeart.png';
-      }
-   }
-}
-
-
-// // Reset Game
-// function resetGame() {
-//     missed = 0;
-//     ul.innerHTML = '';
-//     const shownLetters = document.querySelectorAll('.show');
-//     for (let i = 0; i< shownLetters.length; i++) {
-//         shownLetters[i].classList.remove('show');
-//         shownLetters[i].textContent = '';
-//     };
-//     const letterBtn = document.querySelectorAll('.chosen');
-//     for (let i = 0; i< letterBtn.length; i++) {
-//         letterBtn[i].classList.remove('chosen');
-//         letterBtn[i].disabled = false;
-//     };
-//     const newPhrase = getRandomPhraseAsArray(phrases);
-//     addPhraseToDisplay(newPhrase);
-//     const hearts = document.querySelectorAll('.tries img');
-//     for(let i = 0; i < hearts.length; i++) {
-//         hearts[i].src = 'images/liveHeart.png';
-//     };
-// };
+    for(let i = 0; i < lives.length; i++) {
+        lives[i].src = 'images/liveHeart.png';
+    };
+};
