@@ -1,7 +1,8 @@
 //? [**GAME SHOW APP**]
 
+// *GLOBAL VARIABLES
 const keys = document.getElementById('qwerty');
-const phrase = document.getElementById('phrase');
+const phrase = document.querySelector('#phrase ul');
 const gameBoard = document.getElementById('overlay');
 const startGame = document.querySelector('.btn__reset');
 const title = document.querySelector('.title');
@@ -23,20 +24,20 @@ const phrases =
       "have fun"
    ]; 
 
-// *RETURNS A RANDOM PHRASE FROM ARRAY
+// *RETURNS A RANDOM PHRASE FROM ARRAY SPLIT BY CHARACTERS
 const getRandomPhraseAsArray = phrasesAarry =>
 {
    const randomPhrases = phrasesAarry[Math.floor(Math.random() * phrasesAarry.length)]
    .split('');
    return randomPhrases;
-}
+};
 
 // *ADD LETTERS FROM PHRASES TO DISPLAY RANDOMLY
 const addPhraseToDisplay = phrasesSplitByChar => 
 {
    for(let i = 0; i < phrasesSplitByChar.length; i++)
    {
-      let phraseItem = document.createElement('li');
+      const phraseItem = document.createElement('li');
       if(phrasesSplitByChar[i] === ' ')
       {
          phraseItem.classList.add('space');
@@ -48,10 +49,13 @@ const addPhraseToDisplay = phrasesSplitByChar =>
       phraseItem.innerHTML = phrasesSplitByChar[i];
       phrase.appendChild(phraseItem);
    }
-}
+};
 
+
+// *VARIABLE TO HOLD PHRASES PASSED IN RANDOM PHRASE ARRAY
 const newPhrase = getRandomPhraseAsArray(phrases);
 
+// *EVENT LISTENER TO START GAME ON CLICK
 startGame.addEventListener('click', () => 
 {
    resetGame();
@@ -110,8 +114,8 @@ const checkWin = () =>
       startGame.innerText = 'Play Again🤷‍♂️';
       win = true;
       return win;
-
    } 
+
    else if(misses > 4) 
    {
       title.innerText = '🍀Maybe next time!';
@@ -123,18 +127,20 @@ const checkWin = () =>
    }
 }
 
-// *Reset Game
-function resetGame() {
+// *RESET GAME FUNCTION
+function resetGame() 
+{
     misses = 0;
     phrase.textContent = '';
     const letterBtn = document.querySelectorAll('.chosen');
     
-    for (let i = 0; i< letterBtn.length; i++) {
-        letterBtn[i].classList.remove('chosen');
-        letterBtn[i].disabled = false;
-    };
+    for (let i = 0; i< letterBtn.length; i++) 
+    {
+      letterBtn[i].classList.remove('chosen');
+      letterBtn[i].disabled = false;
+    }
 
     for(let i = 0; i < lives.length; i++) {
-        lives[i].src = 'images/liveHeart.png';
-    };
-};
+      lives[i].src = 'images/liveHeart.png';
+    }
+}
